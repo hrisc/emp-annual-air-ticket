@@ -1,0 +1,159 @@
+<mvc:View controllerName="ZANNUAL_TICKET.controller.Create" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form" displayBlock="true" xmlns:l="sap.ui.layout" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:table="sap.ui.table"
+	xmlns:plugins="sap.ui.table.plugins" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core">
+	<App>
+		<pages>
+			<Page showHeader="false" class="sapUiSizeCompact" busy="{detailView>/busy}" title="{i18n>title}">
+				<content>
+					<VBox class="sapUiSmallMargin sapUiLargeMarginBegin sapUiLargeMarginEnd">
+						<Panel headerText="{i18n>GeneralDetails}" backgroundDesign="Solid">
+							<content>
+								<f:SimpleForm id="form1" class="sapUiSizeCompact" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5"
+									labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="1" emptySpanL="1" emptySpanM="0" emptySpanS="0" columnsXL="2"
+									columnsL="2" columnsM="2" singleContainerFullSize="false">
+									<f:content>
+										<core:Title/>
+										<Label text="{i18n>EmployeeName}"/>
+										<Text text="{AnnualTicket>/HTE/results/0/Ename}"/>
+										<Label text="{i18n>Department}"/>
+										<Text id="Orgeh" text="{AnnualTicket>/HTE/results/0/Orgeh}"/>
+										<Label text="{i18n>HiringDate}"/>
+										<Text text="{path: 'AnnualTicket>/HTE/results/0/Djoin' , type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd.MM.yyyy' }}"/>
+										<Label text="{i18n>EmployeeSubgroup}"/>
+										<Text text="{AnnualTicket>/EPersk}"/>
+										<Label text="{i18n>Mobile}"/>
+										<Input id="Mobile" value="{AnnualTicket>/HTE/results/0/Mobile}"/>
+										<core:Title/>
+										<Label text="{i18n>EmployeeNumber}"/>
+										<Text text="{AnnualTicket>/HTE/results/0/Pernr}"/>
+										<Label text="{i18n>Position}"/>
+										<Text text="{AnnualTicket>/HTE/results/0/Plans}"/>
+										<Label text="{i18n>EmployeePaygrade}"/>
+										<Text text="{AnnualTicket>/ETrfst}"/>
+										<Label text="{i18n>PreviousTicketGrantedOn}"/>
+										<Text text="{path: 'AnnualTicket>/HTE/results/0/Lticket' , type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd.MM.yyyy' }}"/>
+										<Label text="{i18n>OfficeExtension}"/>
+										<Input id="Extn" value="{AnnualTicket>/HTE/results/0/Extn}"/>
+									</f:content>
+								</f:SimpleForm>
+							</content>
+						</Panel>
+						<Panel headerText="{i18n>TravelDetails}" backgroundDesign="Solid">
+							<content>
+								<f:SimpleForm id="form2" class="sapUiResponsiveContentPadding" editable="true" layout="ResponsiveGridLayout" backgroundDesign="Transparent">
+									<f:content>
+										<RadioButtonGroup columns="3" selectedIndex="0" buttons="{/PaymentMethodSet}" id="PaymentMethod" select="onPaymentMethodSelected">
+											<RadioButton id="PaymentRaioButtonId" text="{PaymentText}" />
+										</RadioButtonGroup>
+										<Label visible="false" text="{i18n>PersonnelName}"/>
+										<RadioButtonGroup columns="3" selectedIndex="0" buttons="{ path: 'AnnualTicket>/ValueSet'}" select="onSelectedValueChange" id="Value">
+											<RadioButton text="{AnnualTicket>Ddtext}"/>
+										</RadioButtonGroup>
+									</f:content>
+								</f:SimpleForm>
+								<VBox class="sapUiResponsiveMargin">
+									<!--<Table id="DependentsTable" items="{AnnualTicket>/Dependents}" growing="true" growingThreshold="5" inset="false" growingScrollToLoad="false"
+										itemPress="onItemPressed" busyIndicatorDelay="0" headerText="{i18n>title}">
+										<columns>
+										
+											<Column id="Fname">
+												<Text text="{i18n>FullName}"/>
+											</Column>
+									
+											<Column id="Rel" hAlign="Center" minScreenWidth="Tablet" demandPopin="false">
+												<Text text="{i18n>Relationship}"/>
+											</Column>
+									
+											<Column id="dob" hAlign="Center" minScreenWidth="Tablet" demandPopin="false">
+												<Text text="{i18n>DateOfBirth}"/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem type="{= ${device>/system/phone} ? 'Navigation' : 'Inactive' }" id="salaryColumnListItem">
+												<cells>
+													<Text text="{AnnualTicket>Fname}"/>
+													<Text text="{AnnualTicket>Rel}"/>
+													<Text
+														text="{path: 'AnnualTicket>Dob', type:'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mss' }, pattern: 'dd.MM.yyyy' }}"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>-->
+									<table:Table id="table" enableSelectAll="false" visibleRowCount="7" rows="{AnnualTicket>/Dependents}" threshold="15"
+										enableBusyIndicator="true" ariaLabelledBy="title">
+										<table:columns>
+											<table:Column autoResizable="true">
+												<Label text="{i18n>FullName}"/>
+												<table:template>
+													<Text text="{AnnualTicket>Fname}" wrapping="false"/>
+												</table:template>
+											</table:Column>
+											<table:Column autoResizable="true">
+												<Label text="{i18n>Relationship}"/>
+												<table:template>
+													<Text text="{AnnualTicket>Rel}" wrapping="false"/>
+												</table:template>
+											</table:Column>
+											<table:Column autoResizable="true">
+												<Label text="{i18n>Dob}"/>
+												<table:template>
+													<Text text="{path: 'AnnualTicket>Dob', type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd.MM.yyyy' }}"/>
+												</table:template>
+											</table:Column>
+										</table:columns>
+									</table:Table>
+								</VBox>
+								<f:SimpleForm id="form3" class="sapUiSizeCompact" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3"
+									labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="0" emptySpanS="0" columnsXL="2"
+									columnsL="2" columnsM="2" singleContainerFullSize="false">
+									<f:content>
+										<core:Title/>
+										<Label required="true" text="{i18n>DepartureDate}"/>
+										<DateTimeInput type="Date" id="Depdate" class="mandatory" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy" change="onChangeValue"
+											value="{path: 'Depdate', type:'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss' }, pattern: 'dd.MM.yyyy' }}"/>
+										<Label required="true" text="{i18n>TravellingTo}"/>
+										<Input id="Travelto" class="mandatory" value="{AnnualTicket>/HTT/results/0/Travelto}" liveChange="onChangeValue"/>
+										<Label text="{i18n>PointOfOrigin}"/>
+										<Input id="Porigin" value="{Porigin}" editable="false"/>
+										<core:Title/>
+										<Label text="{i18n>ReturnDate}"/>
+										<DateTimeInput type="Date" id="Redate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy"
+											value="{path: 'Redate', type:'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss' }, pattern: 'dd.MM.yyyy' }}"/>
+										<Label text="{i18n>Country}" required="true"/>
+										<ComboBox id="Country" items="{/COUNTRYSet}" class="mandatory" selectedKey="{Country}" change="onCountryChange">
+											<items>
+												<core:ListItem text="{Landx50}" key="{Land1}"/>
+											</items>
+										</ComboBox>
+										<Label text="{i18n>TravelClass}"/>
+										<Input id="TravelClass" value="{AnnualTicket>/HTT/results/0/TravelClass}" editable="false"/>
+										<!--<Input id="Class" value="{AnnualTicket>/HTT/results/0/Class}"  editable="false"/>-->
+									</f:content>
+								</f:SimpleForm>
+							</content>
+						</Panel>
+						<UploadCollection class="mandatory" id="UploadCollection" maximumFileSize="3" multiple="true" sameFilenameAllowed="false"
+							instantUpload="false" change="onChangeAttachment" uploadUrl="/sap/opu/odata/sap/ZHCM_ANNUAL_TICKET_SRV/AttachSet"
+							fileDeleted="onFileDeleted" fileSizeExceed="onFileSizeExceed" typeMissmatch="onTypeMissmatch" uploadComplete="onUploadComplete"
+							beforeUploadStarts="onBeforeUploadStarts">
+							<toolbar>
+								<OverflowToolbar id="myId">
+									<Title text="{i18n>Attachments}" class="sapMLabelRequired" id="attachmentTitle"/>
+									<ToolbarSpacer/>
+									<UploadCollectionToolbarPlaceholder/>
+								</OverflowToolbar>
+							</toolbar>
+						</UploadCollection>
+					</VBox>
+				</content>
+				<footer>
+					<Bar>
+						<contentRight>
+							<Button type="Accept" id="submit" text="{i18n>Submit}" press="onSubmit"/>
+						</contentRight>
+					</Bar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

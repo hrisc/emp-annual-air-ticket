@@ -1,0 +1,49 @@
+{
+    "resources": [
+        {
+            "name": "index.html"
+        },
+        {
+            "name": "localService/ZPERMISSIONREQUEST_SRV/metadata.xml"
+        },
+        {
+            "name": "localService/metadata.xml"
+        },
+        {
+            "name": "localService/ZHCM_ANNUAL_TICKET_REQ_SRV/metadata.xml"
+        },
+        {
+            "name": "i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "i18n/i18n_ar.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "Component.js"
+        },
+        {
+            "name": "manifest.json"
+        },
+        {
+            "name": "model/models.js"
+        },
+        {
+            "name": "css/style.css"
+        },
+        {
+            "name": "view/Create.view.xml"
+        },
+        {
+            "name": "controller/Create.controller.js"
+        },
+        {
+            "name": "Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": "neo-app.json"
+        }
+    ]
+}

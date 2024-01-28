@@ -1,0 +1,20 @@
+/* Enter your custom styles here */
+
+.sapUiSizeCompact .sapUiFormContainerTitle>.sapUiFormTitle {
+    height: 2rem;
+    line-height: 2rem;
+    display: none;
+}
+
+.sapMPanelContent:not(.sapMPanelBGTransparent){
+    border-bottom: 0px;
+}
+
+.sapUiFormResGrid>div {
+     padding: 0rem 0rem; 
+    /* box-sizing: border-box; */
+}
+
+.hide{
+display: none;	
+}
