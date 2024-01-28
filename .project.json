@@ -1,0 +1,6 @@
+{
+  "deploy": {
+    "destination": "ADLSA",
+    "name": "ZANNUAL_TICKET"
+  }
+}

@@ -119,12 +119,13 @@
 										<Label text="{i18n>ReturnDate}"/>
 										<DateTimeInput type="Date" id="Redate" valueFormat="dd.MM.yyyy" displayFormat="dd.MM.yyyy"
 											value="{path: 'Redate', type:'sap.ui.model.type.Date', formatOptions: { source: { pattern: 'yyyy-MM-ddTHH:mm:ss' }, pattern: 'dd.MM.yyyy' }}"/>
-										<Label text="{i18n>Country}" required="true"/>
-										<ComboBox id="Country" items="{/COUNTRYSet}" class="mandatory" selectedKey="{Country}" change="onCountryChange">
-											<items>
-												<core:ListItem text="{Landx50}" key="{Land1}"/>
-											</items>
-										</ComboBox>
+										<Label text="{i18n>Country}"/>
+										<!--<ComboBox id="Country" items="{/COUNTRYSet}" class="mandatory" selectedKey="{detailView>/Country}" change="onCountryChange">-->
+										<!--	<items>-->
+										<!--		<core:ListItem text="{Landx50}" key="{Land1}"/>-->
+										<!--	</items>-->
+										<!--</ComboBox>-->
+										<Text text="{detailView>/Country}"/>
 										<Label text="{i18n>TravelClass}"/>
 										<Input id="TravelClass" value="{AnnualTicket>/HTT/results/0/TravelClass}" editable="false"/>
 										<!--<Input id="Class" value="{AnnualTicket>/HTT/results/0/Class}"  editable="false"/>-->

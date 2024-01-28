@@ -2,8 +2,9 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"
-], function(Controller, JSONModel, Filter, FilterOperator) {
+	"sap/ui/model/FilterOperator",
+	"sap/m/MessageBox"
+], function(Controller, JSONModel, Filter, FilterOperator, MessageBox) {
 	"use strict";
 	var View = null;
 
@@ -14,7 +15,9 @@ sap.ui.define([
 	return Controller.extend("ZANNUAL_TICKET.controller.Create", {
 		_setDetailView: function() {
 			return new JSONModel({
-				busy: false
+				busy: false,
+				Country:null,
+				CountryKey:null
 			});
 		},
 		onInit: function() {
@@ -32,7 +35,8 @@ sap.ui.define([
 				},
 				success: function(oData) {
 					this.getOwnerComponent().getModel("AnnualTicket").setProperty("/", oData);
-
+					this.getView().getModel("detailView").setProperty("/Country",oData.HTT.results[0].CountryText);
+					this.getView().getModel("detailView").setProperty("/CountryKey",oData.HTT.results[0].Country);
 					var depResults = oData.HTT.results[0];
 					var data = [{
 						"Key": 0,
@@ -224,7 +228,10 @@ sap.ui.define([
 			return d;
 		},
 		onSubmit: function() {
-
+			if(this.getView().byId("table").getSelectedIndices().length > 3){
+				MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+				return;
+			}
 			if (!this.getView().byId("table").getSelectedIndices().length && this.sEntityName === "QA32" && this.getView().byId("Value").getSelectedIndex() === 0) {
 			sap.m.MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("NO_ITEM_SELECTED"));
 			return;
@@ -316,7 +323,7 @@ sap.ui.define([
 				if (View.byId("Redate").getValue() !== "") {
 					oEntry.Redate = this.dateFormatter2(View.byId("Redate").getValue());
 				}
-				oEntry.Country = View.byId("Country").getSelectedKey();
+				oEntry.Country = this.getView().getModel("detailView").getProperty("/CountryKey");
 				// In case of QA32 employee there will be only 2 radio buttons visible
 				//sandeep
 				if (this.sEntityName === "QA32") {
@@ -511,6 +518,14 @@ sap.ui.define([
 					//		value: imageName + "|" + fileExt + "|" + mim + "|" + nFCount
 			});
 			oEvent.getParameters().addHeaderParameter(oSlugHeaderToken);
+		},
+		onTableRowSelected: function(oEvent){
+			if(oEvent.getSource().getSelectedIndices().length > 3){
+				var iIndex = oEvent.getSource().getSelectedIndices().indexOf(oEvent.getParameter("rowIndex"));
+				MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+				
+				oEvent.getSource().removeSelectionInterval(iIndex, iIndex);
+			}
 		}
 	});
 });
