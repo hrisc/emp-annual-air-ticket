@@ -14,10 +14,25 @@ sap.ui.define([
 		});
 	return Controller.extend("ZANNUAL_TICKET.controller.Create", {
 		_setDetailView: function() {
+			/* CR:9000001786:MOPH Air ticket Allowance:V1 - Start
+			Using the array as the Odata structure is linear - Start.
+			all the table structure is been push as single structure
+			 Been used in Function onTableRowSelected - for keeping the count of the Child and wife 
+			 1. Child - maximum 3 are allowed
+			 2. Wife - maximum 1 is allowed
+			 Author - L2_SANDEEPR
+			 
+			 */
+			this.oTableSelectedModel = {
+				child: [],
+				spouse: []
+			};
+			//CR:9000001786:MOPH Air ticket Allowance:V1 - END
 			return new JSONModel({
 				busy: false,
-				Country:null,
-				CountryKey:null
+				Country: null,
+				CountryKey: null,
+				RelType: "0"
 			});
 		},
 		onInit: function() {
@@ -35,8 +50,8 @@ sap.ui.define([
 				},
 				success: function(oData) {
 					this.getOwnerComponent().getModel("AnnualTicket").setProperty("/", oData);
-					this.getView().getModel("detailView").setProperty("/Country",oData.HTT.results[0].CountryText);
-					this.getView().getModel("detailView").setProperty("/CountryKey",oData.HTT.results[0].Country);
+					this.getView().getModel("detailView").setProperty("/Country", oData.HTT.results[0].CountryText);
+					this.getView().getModel("detailView").setProperty("/CountryKey", oData.HTT.results[0].Country);
 					var depResults = oData.HTT.results[0];
 					var data = [{
 						"Key": 0,
@@ -228,13 +243,14 @@ sap.ui.define([
 			return d;
 		},
 		onSubmit: function() {
-			if(this.getView().byId("table").getSelectedIndices().length > 3){
-				MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+			// if(this.getView().byId("table").getSelectedIndices().length > 3){
+			// 	MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+			// 	return;
+			// }
+			if (!this.getView().byId("table").getSelectedIndices().length && this.sEntityName === "QA32" && this.getView().byId("Value").getSelectedIndex() ===
+				0) {
+				sap.m.MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("NO_ITEM_SELECTED"));
 				return;
-			}
-			if (!this.getView().byId("table").getSelectedIndices().length && this.sEntityName === "QA32" && this.getView().byId("Value").getSelectedIndex() === 0) {
-			sap.m.MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("NO_ITEM_SELECTED"));
-			return;
 			}
 
 			var that = this;
@@ -349,8 +365,6 @@ sap.ui.define([
 						oEntry.LpoPdf = "X";
 						break;
 				}
-
-				
 
 				this.oDataModel.create("/SubmitDetailSet", oEntry, {
 					success: function(success, response) {
@@ -519,13 +533,57 @@ sap.ui.define([
 			});
 			oEvent.getParameters().addHeaderParameter(oSlugHeaderToken);
 		},
-		onTableRowSelected: function(oEvent){
-			if(oEvent.getSource().getSelectedIndices().length > 3){
-				var iIndex = oEvent.getSource().getSelectedIndices().indexOf(oEvent.getParameter("rowIndex"));
-				MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
-				
-				oEvent.getSource().removeSelectionInterval(iIndex, iIndex);
+
+		/** 
+		 * CR:9000001786:MOPH Air ticket Allowance:V1 - Start
+		 * @param oEvent {sap.ui.base.Event} Fired if the row selection of the table has been changed.
+		 * 
+		 * We are using the event to catch all the User selection of rows on the table.
+		 * by default only 3 childrens and 1 spouse is allowed.
+		 * Using this approach as the OData does not have 1..* many mapping and only linear structure is been used.
+		 * 
+		 * 
+		 */
+		onTableRowSelected: function(oEvent) {
+			var oContext;
+			if (oEvent.getParameters().rowContext.getObject().RelType === "5") {				// Children
+				if (oEvent.getSource().isIndexSelected(oEvent.getParameters().rowIndex)) {
+					oContext = oEvent.getParameter("rowContext").getObject();
+					//Checking if the limit of 3 has reached.
+					if (this.oTableSelectedModel.child.length === 3) {							
+						oEvent.getSource().removeSelectionInterval(oEvent.getParameter("rowIndex"), oEvent.getParameter("rowIndex"));
+						MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+
+					} else {
+						this.oTableSelectedModel.child.push(oContext);
+					}
+
+				} else {
+
+					var iIndex = this.oTableSelectedModel.child.indexOf(oEvent.getParameter("rowContext").getObject());
+					if (iIndex !== -1) {
+						this.oTableSelectedModel.child.splice(iIndex, 1);
+					}
+
+				}
+			} else if (oEvent.getParameters().rowContext.getObject().RelType === "1") {			//Spouse - Wife
+				if (oEvent.getSource().isIndexSelected(oEvent.getParameters().rowIndex)) {
+					oContext = oEvent.getParameter("rowContext").getObject();
+
+					if (this.oTableSelectedModel.spouse.length === 1) {
+						oEvent.getSource().removeSelectionInterval(oEvent.getParameter("rowIndex"), oEvent.getParameter("rowIndex"));
+						MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+
+					} else {
+						this.oTableSelectedModel.spouse.push(oContext);
+					}
+
+				} else {
+					this.oTableSelectedModel.spouse.pop();
+				}
 			}
+
 		}
+		//CR:9000001786:MOPH Air ticket Allowance:V1 - END
 	});
 });

@@ -79,29 +79,30 @@
 											</ColumnListItem>
 										</items>
 									</Table>-->
-									<table:Table id="table" enableSelectAll="false" visibleRowCount="7" rows="{AnnualTicket>/Dependents}" threshold="15"
-										enableBusyIndicator="true" ariaLabelledBy="title">
-										<table:columns>
-											<table:Column autoResizable="true">
-												<Label text="{i18n>FullName}"/>
-												<table:template>
-													<Text text="{AnnualTicket>Fname}" wrapping="false"/>
-												</table:template>
-											</table:Column>
-											<table:Column autoResizable="true">
-												<Label text="{i18n>Relationship}"/>
-												<table:template>
-													<Text text="{AnnualTicket>Rel}" wrapping="false"/>
-												</table:template>
-											</table:Column>
-											<table:Column autoResizable="true">
-												<Label text="{i18n>Dob}"/>
-												<table:template>
-													<Text text="{path: 'AnnualTicket>Dob', type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd.MM.yyyy' }}"/>
-												</table:template>
-											</table:Column>
-										</table:columns>
-									</table:Table>
+									
+										<table:Table id="table" enableSelectAll="false" visibleRowCount="7" rows="{AnnualTicket>/Dependents}" threshold="15"
+											enableBusyIndicator="true" ariaLabelledBy="title" rowSelectionChange="onTableRowSelected">
+											<table:columns>
+												<table:Column autoResizable="true">
+													<Label text="{i18n>FullName}"/>
+													<table:template>
+														<Text text="{AnnualTicket>Fname}" wrapping="false"/>
+													</table:template>
+												</table:Column>
+												<table:Column autoResizable="true">
+													<Label text="{i18n>Relationship}"/>
+													<table:template>
+														<Text text="{AnnualTicket>Rel}" wrapping="false"/>
+													</table:template>
+												</table:Column>
+												<table:Column autoResizable="true">
+													<Label text="{i18n>Dob}"/>
+													<table:template>
+														<Text text="{path: 'AnnualTicket>Dob', type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd.MM.yyyy' }}"/>
+													</table:template>
+												</table:Column>
+											</table:columns>
+										</table:Table>
 								</VBox>
 								<f:SimpleForm id="form3" class="sapUiSizeCompact" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3"
 									labelSpanM="12" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="2" emptySpanL="2" emptySpanM="0" emptySpanS="0" columnsXL="2"
