@@ -25,7 +25,8 @@ sap.ui.define([
 			 */
 			this.oTableSelectedModel = {
 				child: [],
-				spouse: []
+				spouse: [],
+				self: []
 			};
 			//CR:9000001786:MOPH Air ticket Allowance:V1 - END
 			return new JSONModel({
@@ -580,6 +581,21 @@ sap.ui.define([
 
 				} else {
 					this.oTableSelectedModel.spouse.pop();
+				}
+			}else if (oEvent.getParameters().rowContext.getObject().RelType === "0") {			//Spouse - Wife
+				if (oEvent.getSource().isIndexSelected(oEvent.getParameters().rowIndex)) {
+					oContext = oEvent.getParameter("rowContext").getObject();
+
+					if (this.oTableSelectedModel.self.length === 1) {
+						oEvent.getSource().removeSelectionInterval(oEvent.getParameter("rowIndex"), oEvent.getParameter("rowIndex"));
+						MessageBox.error(this.getView().getModel("i18n").getResourceBundle().getText("MAX_3_ALLOWED"));
+
+					} else {
+						this.oTableSelectedModel.self.push(oContext);
+					}
+
+				} else {
+					this.oTableSelectedModel.self.pop();
 				}
 			}
 
