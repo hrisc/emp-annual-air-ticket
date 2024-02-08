@@ -33,7 +33,8 @@ sap.ui.define([
 				busy: false,
 				Country: null,
 				CountryKey: null,
-				RelType: "0"
+				RelType: "0",
+				ticketIndex :undefined
 			});
 		},
 		onInit: function() {
@@ -417,6 +418,13 @@ sap.ui.define([
 			// } else {
 			// 	View.byId("table").setVisible(true);
 			// }
+			this.getView().getModel("detailView").setProperty("/ticketIndex", evt.getParameter("selectedIndex") );
+			if(this.oTableSelectedModel){
+				this.oTableSelectedModel.child = [];
+				this.oTableSelectedModel.self = [];
+				this.oTableSelectedModel.spouse = [];
+			}
+			
 			View.byId("table").setVisible(true);
 			var sFilter = [];
 			if (this.sEntityName === "QA32") {
@@ -547,7 +555,8 @@ sap.ui.define([
 		 */
 		onTableRowSelected: function(oEvent) {
 			var oContext;
-			if (oEvent.getParameters().rowContext.getObject().RelType === "5") {				// Children
+			if(	this.getView().getModel("detailView").getProperty("/ticketIndex") === 0){
+				if (oEvent.getParameters().rowContext.getObject().RelType === "5") {				// Children
 				if (oEvent.getSource().isIndexSelected(oEvent.getParameters().rowIndex)) {
 					oContext = oEvent.getParameter("rowContext").getObject();
 					//Checking if the limit of 3 has reached.
@@ -598,7 +607,9 @@ sap.ui.define([
 					this.oTableSelectedModel.self.pop();
 				}
 			}
-
+	
+			}
+			
 		}
 		//CR:9000001786:MOPH Air ticket Allowance:V1 - END
 	});
